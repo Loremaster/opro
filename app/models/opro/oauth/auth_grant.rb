@@ -16,12 +16,12 @@ class Opro::Oauth::AuthGrant < ActiveRecord::Base
 
   alias_attribute :token, :access_token
 
-  serialize :permissions, Hash
+  serialize :permissions, ActionController::Parameters
 
   # attr_accessible :code, :access_token, :refresh_token, :access_token_expires_at, :permissions, :user_id, :user, :application_id, :application
 
   def can?(value)
-    HashWithIndifferentAccess.new(permissions)[value]
+    permissions.to_unsafe_h.with_indifferent_access[value]
   end
 
   def expired?
